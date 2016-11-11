@@ -8,7 +8,7 @@ import android.widget.CheckBox;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener, AMap.OnMapLoadedListener {
     private AMap aMap;
     private MapView mapView;
     @Override
@@ -31,6 +31,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (aMap == null) {
             aMap = mapView.getMap();
         }
+        aMap.setOnMapLoadedListener(this);
         CheckBox maptext = (CheckBox) findViewById(R.id.maptext);
         maptext.setOnClickListener(this);
     }
@@ -38,7 +39,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.maptext){
-            aMap.showMapText(((CheckBox) v).isChecked());// 显示底图文字
+            aMap.showMapText(((CheckBox) v).isChecked());// 设置是否显示底图文字
         }
     }
     /**
@@ -76,5 +77,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+    }
+
+    @Override
+    public void onMapLoaded() {
+        //设置地图文字不显示
+        aMap.showMapText(false);
     }
 }
